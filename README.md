@@ -1,62 +1,73 @@
 # ZenvX DigiResearch — digiresearch.zenvx.in
 
-Static website for ZenvX DigiResearch. Plain HTML, CSS and JavaScript — no build step, no framework, no server code. Bilingual (English / Malayalam) with a toggle in the header.
+Static website for **ZenvX DigiResearch**, a research-led digital marketing studio (website building + Meta ads).
+No build step, no framework. Plain HTML, CSS and JS — upload the files anywhere.
 
 ## Pages
 
 | File | Page |
 | --- | --- |
 | `index.html` | Home |
-| `services.html` | Services — website building + Meta ads, pricing |
-| `method.html` | Our Method + the free growth audit |
-| `about.html` | About the studio |
-| `contact.html` | Contact — enquiry form, WhatsApp, FAQ |
+| `services.html` | Services + pricing |
+| `method.html` | Our Method + free audit |
+| `about.html` | About / team |
+| `contact.html` | Contact + enquiry form |
 
-Supporting files: `css/styles.css`, `js/main.js`, `assets/favicon.svg`, `robots.txt`, `sitemap.xml`.
+Assets: `css/styles.css`, `css/bad.css`, `js/main.js`, `js/bad.js`, `assets/favicon.svg`, `robots.txt`, `sitemap.xml`.
 
-## 1. Make the contact form work (required)
+## TWO FACES
 
-The form posts to [Web3Forms](https://web3forms.com), which emails submissions to `sk@zenvx.in`.
+The site ships with two complete looks. A button in the header switches between them.
 
-1. Get a free Access Key at web3forms.com using `sk@zenvx.in` (confirm via the email they send).
-2. In `contact.html`, find:
+1. **Good boy (default)** — minimal, light, fast, calm. Business-first.
+2. **Bad boy** — dark "site of the day" mode: preloader, custom cursor, animated gradient blobs, grain, scroll progress bar, kinetic marquee, per-character heading reveals, glass cards, page-transition curtain.
 
-   ```html
-   <input type="hidden" name="access_key" value="PASTE_YOUR_WEB3FORMS_ACCESS_KEY_HERE">
-   ```
+### How it works
 
-3. Replace the placeholder with your key, keeping the quotes.
+- The active face is stored in `localStorage` under **`zenvx-face`** (`good` or `bad`) and applied as `data-face` on `<html>`.
+- A tiny inline script in `<head>` sets `data-face` **before paint**, so there is no flash of the wrong theme.
+- `sessionStorage` key **`zenvx-seen`** makes the bad-boy preloader play only once per browser session.
+- All bad-face styling lives in `css/bad.css` (scoped to `html[data-face="bad"]`) and all motion in `js/bad.js`.
+- `prefers-reduced-motion` is respected: animations are disabled while the dark look is kept.
+- Language toggle (EN / മലയാളം) works in both faces and is stored under `zenvx-lang`.
 
-Until this is done the form shows a "not connected yet" message instead of silently failing. After deploying, submit it once and check `sk@zenvx.in` (including spam the first time).
+### Make bad boy the default
 
-## 2. Deploy
+In the inline `<head>` script on each page, change:
 
-**Cloudflare Pages / Netlify (easiest)**
+```js
+localStorage.getItem('zenvx-face') || 'good'
+```
 
-1. Connect this repository, or drag the folder in as a manual deploy. No build command, no output directory.
-2. Add the custom domain `digiresearch.zenvx.in`.
-3. In the `zenvx.in` DNS, add the CNAME record they show you (`digiresearch` → their target).
+to:
 
-**GitHub Pages**
+```js
+localStorage.getItem('zenvx-face') || 'bad'
+```
 
-Settings → Pages → Deploy from branch → `main` / root, then add `digiresearch.zenvx.in` as the custom domain.
+### Remove the bad face entirely
 
-**cPanel / shared hosting**
+Delete `css/bad.css` and `js/bad.js`, then remove from each page: the `bad.css` `<link>`, the inline `data-face` script, the `fx-*` divs right after `<body>`, the `<button class="face" ...>` in the header, and the `js/bad.js` `<script>` tag.
 
-Create the `digiresearch` subdomain, upload everything into its folder keeping `css/`, `js/` and `assets/` as folders, and enable free SSL. `index.html` must sit at the site root.
+## Contact form (one thing to do before launch)
 
-## Editing quick reference
+The form on `contact.html` posts to [Web3Forms](https://web3forms.com) and delivers to **sk@zenvx.in**.
 
-| What | Search for |
-| --- | --- |
-| WhatsApp number | `919495029709` |
-| Email | `sk@zenvx.in` |
-| Starting price | `1,999` |
-| Instagram | `zenvxdigiresearch` |
-| Footer year | `2026` |
+1. Get a free access key from web3forms.com using that email address.
+2. In `contact.html`, replace `PASTE_YOUR_WEB3FORMS_ACCESS_KEY_HERE` with your key.
 
-Malayalam copy lives in `data-ml="..."` attributes beside each English string — read through these once and adjust anything that sounds off.
+Until then the form UI works but submissions will not be delivered. WhatsApp and email links work already.
 
-No analytics or tracking pixels are installed. To add any, paste the snippet before `</head>` in each page.
+## Deploy
 
-There is no portfolio page yet by design. When there are results worth showing, add a "Work" link to the nav in every page and a new page following the structure of `services.html`.
+Upload the repo contents to any static host (GitHub Pages, Netlify, Cloudflare Pages, cPanel) and point `digiresearch.zenvx.in` at it. `index.html` is the entry point.
+
+After going live, update `sitemap.xml` dates if you change content.
+
+## Contact
+
+- Email: sk@zenvx.in
+- WhatsApp: +91 94950 29709
+- Instagram: [@zenvxdigiresearch](https://www.instagram.com/zenvxdigiresearch/)
+
+© 2026 ZenvX DigiResearch · A ZenvX venture
