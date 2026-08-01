@@ -248,3 +248,21 @@
     });
   })();
 })();
+
+/* load the optional CDN enhancement layer (Lenis + GSAP) for the bad face */
+(function(){
+  function inject(){
+    try{
+      if(document.documentElement.getAttribute('data-face')!=='bad')return;
+      if(document.getElementById('zx-smooth'))return;
+      var s=document.createElement('script');
+      s.id='zx-smooth';s.src='js/smooth.js';s.defer=true;
+      document.head.appendChild(s);
+    }catch(e){}
+  }
+  inject();
+  document.addEventListener('click',function(e){
+    var b=e.target.closest?e.target.closest('[data-face-btn]'):null;
+    if(b)setTimeout(inject,80);
+  });
+})();
